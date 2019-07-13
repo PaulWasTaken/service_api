@@ -1,6 +1,6 @@
 import logging
 
-# from fcntl import flock, LOCK_EX, LOCK_UN
+from fcntl import flock, LOCK_EX, LOCK_UN
 
 logger = logging.getLogger(__name__)
 

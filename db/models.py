@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import TypeDecorator
 from uuid import UUID
 
-from sqlalchemy.ext.hybrid import hybrid_property
-
 from api import app
 
 
@@ -58,7 +56,7 @@ def set_up_db():
             UserInfo, [
                 form_db_entry('26c940a1-7228-4ea2-a3bc-e6460b172040', 'Петров Иван Сергеевич', 1700, 300, True),
                 form_db_entry('7badc8f8-65bc-449a-8cde-855234ac63e1', 'Kazitsky Jason', 200, 200, True),
-                form_db_entry('5597cc3d-c948-48a0-b711-393edf20d9c0', 'Пархоменко Антон Александрович', 100, 300, True),
+                form_db_entry('5597cc3d-c948-48a0-b711-393edf20d9c0', 'Пархоменко Антон Александрович', 10, 300, True),
                 form_db_entry('867f0924-a917-4711-939b-90b179a96392', 'Петечкин Петр Измаилович', 1000000, 1, False),
                 ]
             )

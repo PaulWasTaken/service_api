@@ -3,6 +3,10 @@ from json import dumps, loads
 from uuid import UUID
 
 
+class IncorrectValueException(Exception):
+    pass
+
+
 class JSONData:
     def __init__(self, json: bytes):
         json = loads(json)
@@ -10,8 +14,14 @@ class JSONData:
         self._uuid = UUID(uuid, version=4)
 
         name = json.get('name')
-        self._name = name
-        self._value = json.get('addition', {}).get('value')
+        if name:
+            self._name = name
+
+        value = json.get('addition', {}).get('value')
+        if value:
+            if value < 0:
+                raise IncorrectValueException('Value parameter should be positive.')
+            self._value = value
 
     @property
     def uuid(self):
@@ -19,10 +29,13 @@ class JSONData:
 
     @property
     def value(self):
+        if not self._value:
+            raise IncorrectValueException('Value parameter can not be None for this type of request.')
         return self._value
 
 
-def form_response(status: int, result: bool, uuid: str=None, name: str=None, addition: dict=None, description: dict=None):
+def form_response(status: int, result: bool, uuid: str = None, name: str = None, addition: dict = None,
+                  description: dict = None):
     result_dict = {
         'status': status,
         'result': result,
