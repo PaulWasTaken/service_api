@@ -3,25 +3,28 @@ from json import dumps, loads
 from uuid import UUID
 
 
-class IncorrectValueException(Exception):
+class IncorrectParameterException(Exception):
     pass
 
 
 class JSONData:
+    """
+    Class to work with JSON.
+    """
     def __init__(self, json: bytes):
-        json = loads(json)
+        json = loads(json.decode())
         uuid = json.get('addition', {}).get('uuid')
+        if not uuid:
+            raise IncorrectParameterException('Parameter `uuid` is empty.')
         self._uuid = UUID(uuid, version=4)
 
-        name = json.get('name')
-        if name:
-            self._name = name
+        self._name = json.get('name')
+        self._value = json.get('addition', {}).get('value')
 
-        value = json.get('addition', {}).get('value')
-        if value:
-            if value < 0:
-                raise IncorrectValueException('Value parameter should be positive.')
-            self._value = value
+        if self._value is not None:
+            self._value = float(self._value)
+            if self._value < 0:
+                raise IncorrectParameterException('Parameter `value` should be positive.')
 
     @property
     def uuid(self):
@@ -29,8 +32,8 @@ class JSONData:
 
     @property
     def value(self):
-        if not self._value:
-            raise IncorrectValueException('Value parameter can not be None for this type of request.')
+        if self._value is None:
+            raise IncorrectParameterException('Parameter `value` can not be `None` for this type of request.')
         return self._value
 
 

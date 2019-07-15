@@ -19,7 +19,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile.service_api
-    image: service_api
+    image: "${IMAGE_BASE}/service_api${BUILD_NUMBER}"
     ports:
       - "80"
     environment:

@@ -2,10 +2,11 @@ import sqlalchemy as sa
 
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import TypeDecorator
+from typing import Union
 from uuid import UUID
 
 from api import app
-
+from core.log import get_logger
 
 db = SQLAlchemy(app)
 
@@ -38,7 +39,7 @@ class UserInfo(db.Model):
     status = sa.Column(sa.Boolean(), nullable=False)
 
 
-def form_db_entry(uuid: str, name: str, balance: int, hold: int, status: bool):
+def form_db_entry(uuid: str, name: str, balance: Union[int, float], hold: Union[int, float], status: bool):
     return {
         'uuid': uuid,
         'name': name,
@@ -49,8 +50,12 @@ def form_db_entry(uuid: str, name: str, balance: int, hold: int, status: bool):
 
 
 def set_up_db():
+    logger = get_logger('set_up_db')
+    logger.debug('Start creating db.')
     db.drop_all()
+    logger.debug('DB was cleared.')
     db.create_all()
+    logger.debug('DB was initialized.')
     with db.engine.begin() as conn:
         conn.execute(sa.insert(
             UserInfo, [
@@ -61,3 +66,4 @@ def set_up_db():
                 ]
             )
         )
+    logger.debug('DB was filled with test values.')

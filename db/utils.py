@@ -1,8 +1,8 @@
-import logging
-
 from fcntl import flock, LOCK_EX, LOCK_UN
 
-logger = logging.getLogger(__name__)
+from core.log import get_logger
+
+logger = get_logger('db_utils')
 
 
 class MyFlock:
@@ -17,7 +17,3 @@ class MyFlock:
     def __exit__(self, exc_type, exc_val, exc_tb):
         flock(self._fd, LOCK_UN)
         self._fd.close()
-        if exc_type:
-            logger.error("Error occurred while holding lock.", exc_info=True)
-            logger.error("Info from __exit__: %s %s", exc_type, exc_val)
-        return True

@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose up
+IMAGE_BASE="test_image" BUILD_NUMBER=":test" docker-compose up
