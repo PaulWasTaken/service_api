@@ -32,7 +32,8 @@ class UUIDv4(TypeDecorator):
 
 
 class UserInfo(db.Model):
-    uuid = sa.Column(UUIDv4(), primary_key=True)
+    uuid_hash = sa.Column(sa.Integer(), primary_key=True)
+    uuid = sa.Column(UUIDv4(), nullable=False)
     name = sa.Column(sa.String(), nullable=False)
     balance = sa.Column(sa.Float(precision=2), nullable=False)
     hold = sa.Column(sa.Float(precision=2), nullable=False)
@@ -41,6 +42,7 @@ class UserInfo(db.Model):
 
 def form_db_entry(uuid: str, name: str, balance: Union[int, float], hold: Union[int, float], status: bool):
     return {
+        'uuid_hash': hash(uuid),
         'uuid': uuid,
         'name': name,
         'balance': balance,

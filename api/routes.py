@@ -66,4 +66,5 @@ def status():
     logger.debug('Status was called.')
     json_data = JSONData(request.data)
     balance, status = get_status(json_data.uuid)
-    return form_response(200, True, json_data.uuid, addition=dict(balance=balance, status=status))
+    return form_response(200, True, json_data.uuid,
+                         addition=dict(balance=balance, status=status))

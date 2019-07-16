@@ -17,14 +17,7 @@ class JSONData:
         if not uuid:
             raise IncorrectParameterException('Parameter `uuid` is empty.')
         self._uuid = UUID(uuid, version=4)
-
-        self._name = json.get('name')
         self._value = json.get('addition', {}).get('value')
-
-        if self._value is not None:
-            self._value = float(self._value)
-            if self._value < 0:
-                raise IncorrectParameterException('Parameter `value` should be positive.')
 
     @property
     def uuid(self):
@@ -33,8 +26,16 @@ class JSONData:
     @property
     def value(self):
         if self._value is None:
-            raise IncorrectParameterException('Parameter `value` can not be `None` for this type of request.')
-        return self._value
+            raise IncorrectParameterException(
+                'Parameter `value` can not be `None` for this type of request.'
+            )
+        else:
+            self._value = float(self._value)
+            if self._value < 0:
+                raise IncorrectParameterException(
+                    'Parameter `value` should be non-negative.'
+                )
+            return self._value
 
 
 def form_response(status: int, result: bool, uuid: str = None, name: str = None, addition: dict = None,
